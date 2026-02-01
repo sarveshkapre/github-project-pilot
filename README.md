@@ -60,7 +60,8 @@ node dist/index.js project-drafts \
   --owner sarveshkapre \
   --project-number 1 \
   --issues-dir out/issues \
-  --report-csv out/report/summary.csv
+  --report-csv out/report/summary.csv \
+  --state-file out/report/project-drafts-state.json
 ```
 
 ## Backlog format

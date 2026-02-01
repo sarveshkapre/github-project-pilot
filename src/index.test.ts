@@ -196,3 +196,40 @@ describe("publish", () => {
     expect(stdout).toContain("--assignee sarveshkapre");
   });
 });
+
+describe("project-drafts", () => {
+  it("skips drafts already recorded in state (dry-run)", () => {
+    const outDir = join(".tmp", "out-project-drafts");
+    execSync(`rm -rf ${outDir}`);
+    execSync(`${bin} simulate -i examples/backlog.yml -o ${outDir} --no-html-report`, { stdio: "ignore" });
+
+    const stateFile = join(outDir, "report", "project-drafts-state.json");
+    writeFileSync(
+      stateFile,
+      `${JSON.stringify(
+        {
+          version: 1,
+          created: {
+            "gp-001": { title: "Bootstrap repo" }
+          }
+        },
+        null,
+        2
+      )}\n`
+    );
+
+    const reportCsv = join(outDir, "report", "summary.csv");
+    const issuesDir = join(outDir, "issues");
+    const stdout = execSync(
+      `${bin} project-drafts --owner o --project-number 1 --issues-dir ${issuesDir} --report-csv ${reportCsv} --dry-run`,
+      { encoding: "utf8" }
+    );
+
+    const dryRunLines = stdout
+      .split("\n")
+      .map((line) => line.trim())
+      .filter((line) => line.startsWith("[dry-run]"));
+    expect(dryRunLines.join("\n")).not.toContain("Bootstrap repo");
+    expect(dryRunLines.join("\n")).toContain("Plan generator MVP");
+  });
+});

@@ -13,6 +13,7 @@
 - Publish input handling is more deterministic (sorted issue draft file listing)
 - Added publish resume support via `publish-state.json` (skips already-created issues)
 - Added `publish --assignee-from-owner` to assign issues from `Owner:` in issue drafts
+- Added `project-drafts` resume support via `project-drafts-state.json` (skips already-created drafts)
 
 ## [0.1.0] - 2026-02-01
 - Initial scaffold with local-first CLI

@@ -9,6 +9,7 @@
 - `--html-theme mono` styling now matches the report layout
 - `publish` can resume via `out/report/publish-state.json` (skips already-created issues)
 - `publish --assignee-from-owner` can assign issues from backlog `owner`
+- `project-drafts` can resume via `out/report/project-drafts-state.json` (skips already-created drafts)
 - Backlog duplicate IDs are rejected early with a clear error
 
 ## How to verify
