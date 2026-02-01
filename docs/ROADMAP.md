@@ -3,10 +3,10 @@
 ## Now
 - Harden input validation
 - Add per-item metadata overrides
+- Add HTML report styling
 
 ## Next
 - Optional GitHub API integration (opt-in, with auth)
-- Issue draft previews (HTML report)
 - Import summary CSV into GitHub Issues
 
 ## Later

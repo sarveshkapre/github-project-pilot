@@ -26,5 +26,8 @@ describe("simulate", () => {
 
     const summaryCsv = readFileSync(join(outDir, "report", "summary.csv"), "utf8");
     expect(summaryCsv).toContain("gp-001");
+
+    const html = readFileSync(join(outDir, "report", "index.html"), "utf8");
+    expect(html).toContain("GitHub Project Pilot Report");
   });
 });

@@ -29,6 +29,7 @@ Data flow:
 - [x] `simulate` command generates plan + issue drafts
 - [x] Template overrides for plan + issues
 - [x] Summary report output (CSV/JSON)
+- [x] HTML report output
 - [x] Deterministic output paths with item IDs
 - [x] Smoke test for CLI
 - [x] Repo scaffolding and CI

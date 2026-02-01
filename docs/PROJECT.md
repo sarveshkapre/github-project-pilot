@@ -13,4 +13,4 @@
 ## Next 3 Improvements
 1. Add template variables for section overrides (per-item metadata)
 2. Add validation for missing template placeholders
-3. Add CSV/JSON import back into GitHub Issues
+3. Add configurable HTML themes

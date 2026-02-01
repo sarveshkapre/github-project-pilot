@@ -19,6 +19,7 @@ Outputs:
 - `out/issues/*.md`
 - `out/report/summary.json`
 - `out/report/summary.csv`
+- `out/report/index.html`
 
 ## CLI
 ```bash
@@ -32,6 +33,15 @@ node dist/index.js simulate \
   --issue-template examples/templates/issue.md \
   --plan-template examples/templates/plan.md \
   --report report
+```
+
+Publish to GitHub (requires token):
+```bash
+export GITHUB_TOKEN=your_token
+node dist/index.js publish \
+  --repo sarveshkapre/github-project-pilot \
+  --issues-dir out/issues \
+  --report-csv out/report/summary.csv
 ```
 
 ## Backlog format
