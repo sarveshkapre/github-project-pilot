@@ -27,6 +27,7 @@ Data flow:
 
 ## MVP Checklist
 - [x] Backlog YAML schema + validation
+- [x] Reject duplicate item IDs (prevents collisions)
 - [x] `simulate` command generates plan + issue drafts
 - [x] Template overrides for plan + issues
 - [x] Summary report output (CSV/JSON)

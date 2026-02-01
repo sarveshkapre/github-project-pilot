@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import { Command } from "commander";
+import { Command, CommanderError } from "commander";
 import {
   existsSync,
   readdirSync,
@@ -189,7 +189,9 @@ program
 function loadBacklog(filePath: string): Backlog {
   const raw = readFileSync(filePath, "utf8");
   const parsed = parseYaml(raw);
-  return BacklogSchema.parse(parsed);
+  const backlog = BacklogSchema.parse(parsed);
+  assertUniqueItemIds(backlog);
+  return backlog;
 }
 
 function buildIssueDrafts(backlog: Backlog, templates: Templates): IssueDraft[] {
@@ -757,6 +759,21 @@ function buildLabels(status: string, rawLabels: string[]): string[] {
   return normalized;
 }
 
+function assertUniqueItemIds(backlog: Backlog): void {
+  const seen = new Set<string>();
+  const duplicates = new Set<string>();
+  backlog.items.forEach((item) => {
+    if (seen.has(item.id)) {
+      duplicates.add(item.id);
+    }
+    seen.add(item.id);
+  });
+  if (duplicates.size > 0) {
+    const list = [...duplicates].sort((a, b) => a.localeCompare(b)).join(", ");
+    throw new Error(`Duplicate backlog item id(s): ${list}`);
+  }
+}
+
 function issueDraftFilename(index: number, issue: Pick<IssueDraft, "id" | "title">): string {
   const safeTitle = slugify(issue.title) || "issue";
   return `${String(index + 1).padStart(2, "0")}-${issue.id}-${safeTitle}.md`;
@@ -835,4 +852,21 @@ function parseIssueNumber(url: string): number | undefined {
   return Number.isNaN(parsed) ? undefined : parsed;
 }
 
-program.parse(process.argv);
+program.exitOverride();
+try {
+  program.parse(process.argv);
+} catch (error) {
+  if (error instanceof CommanderError) {
+    if (error.code === "commander.helpDisplayed" || error.code === "commander.version") {
+      process.exitCode = error.exitCode;
+    } else if (error.message) {
+      console.error(error.message);
+      process.exitCode = error.exitCode ?? 1;
+    } else {
+      process.exitCode = error.exitCode ?? 1;
+    }
+  } else {
+    console.error(error instanceof Error ? error.message : String(error));
+    process.exitCode = 1;
+  }
+}

@@ -6,6 +6,7 @@
 - `simulate` supports `--clean` (removes output dir before writing)
 - HTML report is more usable (search/filter, responsive layout, dark-mode support for paper theme)
 - `publish` can resume via `out/report/publish-state.json` (skips already-created issues)
+- Backlog duplicate IDs are rejected early with a clear error
 
 ## How to verify
 - `make check`

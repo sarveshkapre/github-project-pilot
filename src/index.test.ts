@@ -1,4 +1,4 @@
-import { execSync } from "node:child_process";
+import { execSync, spawnSync } from "node:child_process";
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { beforeAll, describe, expect, it } from "vitest";
@@ -51,6 +51,33 @@ describe("simulate", () => {
     execSync(`${bin} simulate -i examples/backlog.yml -o ${outDir} --clean --no-html-report`, { stdio: "ignore" });
     expect(existsSync(join(outDir, "stale.txt"))).toBe(false);
     expect(existsSync(join(outDir, "plan.md"))).toBe(true);
+  });
+
+  it("rejects duplicate item IDs", () => {
+    const outDir = join(".tmp", "out-duplicate-ids");
+    execSync(`rm -rf ${outDir}`);
+    mkdirSync(outDir, { recursive: true });
+    const backlogPath = join(outDir, "backlog.yml");
+    writeFileSync(
+      backlogPath,
+      [
+        "project: Dupes",
+        "items:",
+        "  - id: dup-1",
+        "    title: One",
+        "    pitch: One",
+        "  - id: dup-1",
+        "    title: Two",
+        "    pitch: Two"
+      ].join("\n")
+    );
+
+    const result = spawnSync("node", ["dist/index.js", "simulate", "-i", backlogPath, "-o", outDir, "--dry-run"], {
+      encoding: "utf8"
+    });
+    expect(result.status).not.toBe(0);
+    expect(result.stderr).toContain("Duplicate backlog item id(s): dup-1");
+    expect(result.stderr).not.toContain(" at ");
   });
 });
 

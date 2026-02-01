@@ -7,6 +7,7 @@
 - Improved HTML report UX (search/filter, accessible structure, responsive layout, dark-mode support for paper theme)
 - CLI version now reads from `package.json`
 - Hardened backlog item IDs to be filename-safe
+- CLI now prints clean error messages for user input errors (no stack traces)
 - Publish input handling is more deterministic (sorted issue draft file listing)
 - Added publish resume support via `publish-state.json` (skips already-created issues)
 
