@@ -82,6 +82,7 @@ program
   .option("-o, --out <dir>", "output directory", "./out")
   .option("--clean", "delete the output directory before writing", false)
   .option("--format <name>", "stdout summary format (pretty|json)", "pretty")
+  .option("--generated-at <value>", "override plan generated_at (ISO 8601)")
   .option("--issue-template <file>", "issue template file path")
   .option("--plan-template <file>", "plan template file path")
   .option("--report <dir>", "summary report directory (relative to output)", "report")
@@ -97,7 +98,8 @@ program
       validateTemplates(templates);
     }
     const issues = buildIssueDrafts(backlog, templates);
-    const plan = buildPlan(backlog, templates);
+    const generatedAt = normalizeGeneratedAt(options.generatedAt);
+    const plan = buildPlan(backlog, templates, generatedAt);
 
     if (options.dryRun) {
       printSummary(backlog, issues, format);
@@ -257,7 +259,7 @@ function buildIssueDrafts(backlog: Backlog, templates: Templates): IssueDraft[] 
   });
 }
 
-function buildPlan(backlog: Backlog, templates: Templates): string {
+function buildPlan(backlog: Backlog, templates: Templates, generatedAt: string): string {
   const items = backlog.items
     .map((item, index) => {
       const tasks = item.tasks.length ? item.tasks.map((t) => `- ${t}`).join("\n") : "- Define tasks";
@@ -282,7 +284,7 @@ function buildPlan(backlog: Backlog, templates: Templates): string {
 
   return applyTemplate(templates.plan, {
     project: backlog.project,
-    generated_at: new Date().toISOString(),
+    generated_at: generatedAt,
     items
   });
 }
@@ -556,6 +558,21 @@ function normalizeOutputFormat(format: string): OutputFormat {
     throw new Error(`Unknown format "${format}". Expected "pretty" or "json".`);
   }
   return normalized;
+}
+
+function normalizeGeneratedAt(value?: string): string {
+  if (value === undefined) {
+    return new Date().toISOString();
+  }
+  const trimmed = String(value).trim();
+  if (!trimmed) {
+    throw new Error(`Invalid generated-at value: "${value}"`);
+  }
+  // Basic validation to catch obvious mistakes while staying permissive.
+  if (!/^\d{4}-\d{2}-\d{2}T/.test(trimmed)) {
+    throw new Error(`generated-at must be an ISO 8601 timestamp, got: "${value}"`);
+  }
+  return trimmed;
 }
 
 function paperThemeCss(): string {

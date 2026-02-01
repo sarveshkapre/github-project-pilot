@@ -32,6 +32,7 @@ For more, see `docs/PROJECT.md`.
 - 2026-02-01: `publish --assignee-from-owner` to assign issues from `Owner:` in issue drafts
 - 2026-02-01: `project-drafts` resume state via `out/report/project-drafts-state.json`
 - 2026-02-01: `simulate --format json` for CI-friendly stdout summaries
+- 2026-02-01: `simulate --generated-at <iso>` for reproducible plan timestamps
 
 ## Next
 - Per-item metadata overrides beyond labels (priority, milestones, assignees)

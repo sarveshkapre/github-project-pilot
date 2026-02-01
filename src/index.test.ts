@@ -64,6 +64,17 @@ describe("simulate", () => {
     });
   });
 
+  it("can override generated_at for deterministic plan output", () => {
+    const outDir = join(".tmp", "out-generated-at");
+    execSync(`rm -rf ${outDir}`);
+    const stamp = "2000-01-01T00:00:00.000Z";
+    execSync(`${bin} simulate -i examples/backlog.yml -o ${outDir} --generated-at ${stamp} --no-html-report`, {
+      stdio: "ignore"
+    });
+    const plan = readFileSync(join(outDir, "plan.md"), "utf8");
+    expect(plan).toContain(`Generated: ${stamp}`);
+  });
+
   it("can clean an existing output directory", () => {
     const outDir = join(".tmp", "out-clean");
     execSync(`rm -rf ${outDir}`);

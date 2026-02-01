@@ -47,6 +47,11 @@ CI/pipeline-friendly output:
 node dist/index.js simulate -i examples/backlog.yml --dry-run --format json
 ```
 
+Reproducible plan timestamp:
+```bash
+node dist/index.js simulate -i examples/backlog.yml -o out --generated-at 2000-01-01T00:00:00.000Z
+```
+
 Publish to GitHub (requires `gh auth login`):
 ```bash
 node dist/index.js publish \
