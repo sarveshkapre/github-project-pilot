@@ -1,13 +1,16 @@
 import { execSync } from "node:child_process";
-import { readFileSync } from "node:fs";
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
-import { describe, expect, it } from "vitest";
+import { beforeAll, describe, expect, it } from "vitest";
 
 const bin = "node dist/index.js";
 
 describe("simulate", () => {
-  it("generates plan and issues", () => {
+  beforeAll(() => {
     execSync("npm run build", { stdio: "ignore" });
+  });
+
+  it("generates plan and issues", () => {
     const outDir = join(".tmp", "out");
     execSync(`rm -rf ${outDir}`);
     execSync(
@@ -29,5 +32,56 @@ describe("simulate", () => {
 
     const html = readFileSync(join(outDir, "report", "index.html"), "utf8");
     expect(html).toContain("GitHub Project Pilot Report");
+  });
+
+  it("can disable the HTML report", () => {
+    const outDir = join(".tmp", "out-no-html");
+    execSync(`rm -rf ${outDir}`);
+    execSync(`${bin} simulate -i examples/backlog.yml -o ${outDir} --no-html-report`, { stdio: "ignore" });
+    expect(existsSync(join(outDir, "report", "index.html"))).toBe(false);
+  });
+});
+
+describe("publish", () => {
+  it("skips issues already recorded in publish state (dry-run)", () => {
+    const outDir = join(".tmp", "out-publish");
+    execSync(`rm -rf ${outDir}`);
+    execSync(`${bin} simulate -i examples/backlog.yml -o ${outDir}`, { stdio: "ignore" });
+
+    const reportDir = join(outDir, "report");
+    mkdirSync(reportDir, { recursive: true });
+    const stateFile = join(reportDir, "publish-state.json");
+    writeFileSync(
+      stateFile,
+      `${JSON.stringify(
+        {
+          version: 1,
+          created: {
+            "gp-001": {
+              title: "Bootstrap repo",
+              labels: ["status:backlog", "docs", "ci"],
+              url: "https://github.com/o/r/issues/1",
+              number: 1
+            }
+          }
+        },
+        null,
+        2
+      )}\n`
+    );
+
+    const reportCsv = join(reportDir, "summary.csv");
+    const issuesDir = join(outDir, "issues");
+    const stdout = execSync(
+      `${bin} publish --repo o/r --issues-dir ${issuesDir} --report-csv ${reportCsv} --dry-run`,
+      { encoding: "utf8" }
+    );
+
+    const dryRunLines = stdout
+      .split("\n")
+      .map((line) => line.trim())
+      .filter((line) => line.startsWith("[dry-run]"));
+    expect(dryRunLines.join("\n")).not.toContain("Bootstrap repo");
+    expect(dryRunLines.join("\n")).toContain("Plan generator MVP");
   });
 });

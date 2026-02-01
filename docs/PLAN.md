@@ -17,6 +17,7 @@ Rationale: small dependency footprint, fast CLI iteration, strong type safety.
 - `src/index.ts`: CLI entrypoint and commands
 - `examples/`: sample backlog input
 - `out/`: generated plan + issue drafts
+- Backlog items may include optional `labels` (propagates to drafts, reports, and publishing)
 
 Data flow:
 1. Parse backlog YAML

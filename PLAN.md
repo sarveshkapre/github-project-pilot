@@ -1,0 +1,30 @@
+# GitHub Project Pilot
+
+Local-first CLI that turns a YAML backlog into an execution plan + GitHub issue drafts (and optional `gh`-powered publishing), with deterministic, reviewable outputs.
+
+## Features
+- `simulate`: generate `plan.md`, issue draft markdown, CSV/JSON summary, and an HTML report
+- Templates: override plan/issue templates with placeholders
+- `publish`: create GitHub Issues via `gh` CLI (batched + delayed)
+- `project-drafts`: create GitHub Project draft items via `gh` CLI
+
+## Top risks / unknowns
+- Backlog schema evolution (metadata fields, backward compatibility)
+- Determinism vs. usability (timestamps, ordering, filename stability)
+- `gh` CLI behavior drift across versions (flags, auth scopes)
+
+## Commands
+- Quality gate: `make check` (lint + typecheck + test + build)
+- Dev help: `make dev`
+- Example run: `node dist/index.js simulate -i examples/backlog.yml -o out`
+
+For more, see `docs/PROJECT.md`.
+
+## Shipped (latest)
+- 2026-02-01: Per-item backlog labels + improved HTML report (filtering, a11y structure, dark-mode support)
+- 2026-02-01: `simulate --no-html-report` to skip generating `report/index.html`
+- 2026-02-01: `publish` resume support via `out/report/publish-state.json` (skips already-created issues)
+
+## Next
+- Per-item metadata overrides beyond labels (priority, milestones, assignees)
+- GitHub Project field mapping (status/owner/priority)

@@ -11,6 +11,6 @@
 - Release prep: `make release`
 
 ## Next 3 Improvements
-1. Add template variables for section overrides (per-item metadata)
+1. Add template variables for section overrides (per-item metadata beyond labels)
 2. Add per-item field mapping for GitHub Projects
-3. Add publish resume support (skip existing issues)
+3. Add publish ergonomics: progress output, richer state, better error messages

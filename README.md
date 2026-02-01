@@ -33,6 +33,7 @@ node dist/index.js simulate \
   --issue-template examples/templates/issue.md \
   --plan-template examples/templates/plan.md \
   --report report \
+  --no-html-report \
   --html-theme paper
 ```
 
@@ -43,7 +44,8 @@ node dist/index.js publish \
   --issues-dir out/issues \
   --report-csv out/report/summary.csv \
   --limit 10 \
-  --delay-ms 300
+  --delay-ms 300 \
+  --state-file out/report/publish-state.json
 ```
 
 Create GitHub Project draft items (requires `gh auth login` + project scope):
@@ -62,6 +64,10 @@ items:
   - id: ex-001
     title: Bootstrap repo
     pitch: Create the base repository scaffolding.
+    owner: alice
+    labels:
+      - docs
+      - ci
     status: backlog
     tasks:
       - Add docs

@@ -4,6 +4,9 @@ items:
     title: Bootstrap repo
     pitch: Create the base repository scaffolding and CI pipeline.
     status: backlog
+    labels:
+      - docs
+      - ci
     tasks:
       - Add repo docs and hygiene files
       - Configure CI checks
