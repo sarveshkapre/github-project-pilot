@@ -29,6 +29,7 @@ For more, see `docs/PROJECT.md`.
 - 2026-02-01: CLI error handling (clean user-facing errors, no stack traces)
 - 2026-02-01: Fixed `--html-theme mono` styling to match the report layout
 - 2026-02-01: Per-item `acceptance` + `risks` fields (override defaults in plan + issue drafts)
+- 2026-02-01: `publish --assignee-from-owner` to assign issues from `Owner:` in issue drafts
 
 ## Next
 - Per-item metadata overrides beyond labels (priority, milestones, assignees)

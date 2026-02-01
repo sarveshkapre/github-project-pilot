@@ -168,4 +168,31 @@ describe("publish", () => {
     expect(dryRunLines.join("\n")).not.toContain("Bootstrap repo");
     expect(dryRunLines.join("\n")).toContain("Plan generator MVP");
   });
+
+  it("can assign from Owner: in issue drafts (dry-run)", () => {
+    const outDir = join(".tmp", "out-publish-assign");
+    execSync(`rm -rf ${outDir}`);
+    mkdirSync(outDir, { recursive: true });
+    const backlogPath = join(outDir, "backlog.yml");
+    writeFileSync(
+      backlogPath,
+      [
+        "project: Assign",
+        "items:",
+        "  - id: as-001",
+        "    title: Assign me",
+        "    pitch: Assign me.",
+        "    owner: sarveshkapre"
+      ].join("\n")
+    );
+    execSync(`${bin} simulate -i ${backlogPath} -o ${outDir} --no-html-report`, { stdio: "ignore" });
+
+    const reportCsv = join(outDir, "report", "summary.csv");
+    const issuesDir = join(outDir, "issues");
+    const stdout = execSync(
+      `${bin} publish --repo o/r --issues-dir ${issuesDir} --report-csv ${reportCsv} --assignee-from-owner --dry-run`,
+      { encoding: "utf8" }
+    );
+    expect(stdout).toContain("--assignee sarveshkapre");
+  });
 });

@@ -50,7 +50,8 @@ node dist/index.js publish \
   --report-csv out/report/summary.csv \
   --limit 10 \
   --delay-ms 300 \
-  --state-file out/report/publish-state.json
+  --state-file out/report/publish-state.json \
+  --assignee-from-owner
 ```
 
 Create GitHub Project draft items (requires `gh auth login` + project scope):

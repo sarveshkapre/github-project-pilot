@@ -8,6 +8,7 @@
 - HTML report is more usable (search/filter, responsive layout, dark-mode support for paper theme)
 - `--html-theme mono` styling now matches the report layout
 - `publish` can resume via `out/report/publish-state.json` (skips already-created issues)
+- `publish --assignee-from-owner` can assign issues from backlog `owner`
 - Backlog duplicate IDs are rejected early with a clear error
 
 ## How to verify
