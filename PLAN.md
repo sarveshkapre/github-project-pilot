@@ -28,6 +28,7 @@ For more, see `docs/PROJECT.md`.
 - 2026-02-01: Backlog duplicate ID validation (fails fast with a clear error)
 - 2026-02-01: CLI error handling (clean user-facing errors, no stack traces)
 - 2026-02-01: Fixed `--html-theme mono` styling to match the report layout
+- 2026-02-01: Per-item `acceptance` + `risks` fields (override defaults in plan + issue drafts)
 
 ## Next
 - Per-item metadata overrides beyond labels (priority, milestones, assignees)

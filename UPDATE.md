@@ -2,6 +2,7 @@
 
 ## What shipped
 - Per-item backlog `labels` now flow into drafts, reports, and `publish`
+- Per-item backlog `acceptance` and `risks` override the default sections
 - `simulate` supports `--no-html-report`
 - `simulate` supports `--clean` (removes output dir before writing)
 - HTML report is more usable (search/filter, responsive layout, dark-mode support for paper theme)

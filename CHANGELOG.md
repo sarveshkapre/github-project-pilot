@@ -2,6 +2,7 @@
 
 ## [Unreleased]
 - Added per-item `labels` support in backlog YAML (propagates to drafts, CSV/JSON, and publishing)
+- Added per-item `acceptance` and `risks` overrides in backlog YAML
 - Added `--no-html-report` to disable HTML report generation
 - Added `simulate --clean` to delete the output directory before writing
 - Improved HTML report UX (search/filter, accessible structure, responsive layout, dark-mode support for paper theme)

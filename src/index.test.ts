@@ -63,6 +63,41 @@ describe("simulate", () => {
     expect(existsSync(join(outDir, "plan.md"))).toBe(true);
   });
 
+  it("supports per-item acceptance and risks", () => {
+    const outDir = join(".tmp", "out-overrides");
+    execSync(`rm -rf ${outDir}`);
+    mkdirSync(outDir, { recursive: true });
+    const backlogPath = join(outDir, "backlog.yml");
+    writeFileSync(
+      backlogPath,
+      [
+        "project: Overrides",
+        "items:",
+        "  - id: ov-001",
+        "    title: Add thing",
+        "    pitch: Do the thing.",
+        "    tasks:",
+        "      - Do A",
+        "    acceptance:",
+        "      - Custom acceptance",
+        "    risks:",
+        "      - Custom risk"
+      ].join("\n")
+    );
+
+    execSync(`${bin} simulate -i ${backlogPath} -o ${outDir} --no-html-report`, { stdio: "ignore" });
+
+    const plan = readFileSync(join(outDir, "plan.md"), "utf8");
+    expect(plan).toContain("Acceptance:");
+    expect(plan).toContain("- Custom acceptance");
+    expect(plan).toContain("Risks:");
+    expect(plan).toContain("- Custom risk");
+
+    const issue = readFileSync(join(outDir, "issues", "01-ov-001-add-thing.md"), "utf8");
+    expect(issue).toContain("Acceptance criteria:");
+    expect(issue).toContain("- Custom acceptance");
+  });
+
   it("rejects duplicate item IDs", () => {
     const outDir = join(".tmp", "out-duplicate-ids");
     execSync(`rm -rf ${outDir}`);

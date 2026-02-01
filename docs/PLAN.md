@@ -30,6 +30,7 @@ Data flow:
 - [x] Reject duplicate item IDs (prevents collisions)
 - [x] `simulate` command generates plan + issue drafts
 - [x] Template overrides for plan + issues
+- [x] Per-item acceptance + risks overrides
 - [x] Summary report output (CSV/JSON)
 - [x] HTML report output
 - [x] Deterministic output paths with item IDs

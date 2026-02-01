@@ -77,6 +77,11 @@ items:
     tasks:
       - Add docs
       - Configure CI
+    acceptance:
+      - All checks pass
+      - Docs updated
+    risks:
+      - Scope creep
 ```
 
 ## Docker

@@ -23,7 +23,9 @@ const BacklogItemSchema = z.object({
   owner: z.string().optional(),
   labels: z.array(z.string().min(1)).default([]),
   status: z.enum(["backlog", "scaffolded", "mvp", "hardened", "shipped"]).default("backlog"),
-  tasks: z.array(z.string().min(1)).default([])
+  tasks: z.array(z.string().min(1)).default([]),
+  acceptance: z.array(z.string().min(1)).default([]),
+  risks: z.array(z.string().min(1)).default([])
 });
 
 const BacklogSchema = z.object({
@@ -199,6 +201,7 @@ function buildIssueDrafts(backlog: Backlog, templates: Templates): IssueDraft[] 
     const labels = buildLabels(item.status, item.labels);
     const labelString = labels.join(", ");
     const tasks = item.tasks.length ? item.tasks.map((t) => `- ${t}`).join("\n") : "- Define tasks";
+    const acceptance = buildAcceptance(item.acceptance);
     const body = applyTemplate(templates.issue, {
       project: backlog.project,
       id: item.id,
@@ -208,11 +211,7 @@ function buildIssueDrafts(backlog: Backlog, templates: Templates): IssueDraft[] 
       status: item.status,
       tasks,
       labels: labelString,
-      acceptance: [
-        "- Plan exists in /plans",
-        "- Docs updated (PLAN/PROJECT/CHANGELOG)",
-        "- check passes"
-      ].join("\n")
+      acceptance
     });
 
     return {
@@ -228,6 +227,8 @@ function buildPlan(backlog: Backlog, templates: Templates): string {
   const items = backlog.items
     .map((item, index) => {
       const tasks = item.tasks.length ? item.tasks.map((t) => `- ${t}`).join("\n") : "- Define tasks";
+      const risks = buildRisks(item.risks);
+      const acceptance = buildAcceptance(item.acceptance);
       return [
         `## ${index + 1}. ${item.title}`,
         `ID: ${item.id}`,
@@ -236,10 +237,11 @@ function buildPlan(backlog: Backlog, templates: Templates): string {
         "Tasks:",
         tasks,
         "",
+        "Acceptance:",
+        acceptance,
+        "",
         "Risks:",
-        "- Scope creep",
-        "- Missing tests",
-        "- Unsafe defaults"
+        risks
       ].join("\n");
     })
     .join("\n\n");
@@ -792,6 +794,18 @@ function buildLabels(status: string, rawLabels: string[]): string[] {
   add(`status:${status}`);
   rawLabels.forEach(add);
   return normalized;
+}
+
+function buildAcceptance(acceptance: string[]): string {
+  const defaults = ["Plan exists in /plans", "Docs updated (PLAN/PROJECT/CHANGELOG)", "check passes"];
+  const list = (acceptance.length ? acceptance : defaults).map((line) => `- ${line}`);
+  return list.join("\n");
+}
+
+function buildRisks(risks: string[]): string {
+  const defaults = ["Scope creep", "Missing tests", "Unsafe defaults"];
+  const list = (risks.length ? risks : defaults).map((line) => `- ${line}`);
+  return list.join("\n");
 }
 
 function assertUniqueItemIds(backlog: Backlog): void {
