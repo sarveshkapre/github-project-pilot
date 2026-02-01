@@ -33,6 +33,7 @@ node dist/index.js simulate \
   --issue-template examples/templates/issue.md \
   --plan-template examples/templates/plan.md \
   --report report \
+  --clean \
   --no-html-report \
   --html-theme paper
 ```

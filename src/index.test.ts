@@ -40,6 +40,18 @@ describe("simulate", () => {
     execSync(`${bin} simulate -i examples/backlog.yml -o ${outDir} --no-html-report`, { stdio: "ignore" });
     expect(existsSync(join(outDir, "report", "index.html"))).toBe(false);
   });
+
+  it("can clean an existing output directory", () => {
+    const outDir = join(".tmp", "out-clean");
+    execSync(`rm -rf ${outDir}`);
+    mkdirSync(outDir, { recursive: true });
+    writeFileSync(join(outDir, "stale.txt"), "stale");
+    expect(existsSync(join(outDir, "stale.txt"))).toBe(true);
+
+    execSync(`${bin} simulate -i examples/backlog.yml -o ${outDir} --clean --no-html-report`, { stdio: "ignore" });
+    expect(existsSync(join(outDir, "stale.txt"))).toBe(false);
+    expect(existsSync(join(outDir, "plan.md"))).toBe(true);
+  });
 });
 
 describe("publish", () => {

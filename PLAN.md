@@ -24,6 +24,7 @@ For more, see `docs/PROJECT.md`.
 - 2026-02-01: Per-item backlog labels + improved HTML report (filtering, a11y structure, dark-mode support)
 - 2026-02-01: `simulate --no-html-report` to skip generating `report/index.html`
 - 2026-02-01: `publish` resume support via `out/report/publish-state.json` (skips already-created issues)
+- 2026-02-01: `simulate --clean` to remove the output directory before writing (prevents stale drafts/reports)
 
 ## Next
 - Per-item metadata overrides beyond labels (priority, milestones, assignees)

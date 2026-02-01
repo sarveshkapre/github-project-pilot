@@ -1,6 +1,13 @@
 #!/usr/bin/env node
 import { Command } from "commander";
-import { existsSync, readdirSync, readFileSync, mkdirSync, writeFileSync } from "node:fs";
+import {
+  existsSync,
+  readdirSync,
+  readFileSync,
+  mkdirSync,
+  rmSync,
+  writeFileSync
+} from "node:fs";
 import { dirname, join } from "node:path";
 import { execFileSync } from "node:child_process";
 import { z } from "zod";
@@ -62,6 +69,7 @@ program
   .description("Generate a local plan and issue drafts from a backlog YAML file.")
   .requiredOption("-i, --input <file>", "backlog YAML file")
   .option("-o, --out <dir>", "output directory", "./out")
+  .option("--clean", "delete the output directory before writing", false)
   .option("--issue-template <file>", "issue template file path")
   .option("--plan-template <file>", "plan template file path")
   .option("--report <dir>", "summary report directory (relative to output)", "report")
@@ -84,6 +92,9 @@ program
     }
 
     const theme = normalizeTheme(options.htmlTheme);
+    if (options.clean) {
+      cleanOutputDir(options.out);
+    }
     writeOutputs(options.out, plan, issues, options.report, options.htmlReport, theme);
     printSummary(backlog, issues, options.out);
   });
@@ -767,6 +778,17 @@ function readPackageVersion(): string {
   } catch {
     return "0.0.0";
   }
+}
+
+function cleanOutputDir(outDir: string): void {
+  const normalized = outDir.trim();
+  if (!normalized || normalized === "." || normalized === "/" || normalized === "./") {
+    throw new Error(`Refusing to clean unsafe output directory: "${outDir}"`);
+  }
+  if (!existsSync(normalized)) {
+    return;
+  }
+  rmSync(normalized, { recursive: true, force: true });
 }
 
 const PublishStateSchema = z.object({

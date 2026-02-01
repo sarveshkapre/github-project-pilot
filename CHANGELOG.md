@@ -3,6 +3,7 @@
 ## [Unreleased]
 - Added per-item `labels` support in backlog YAML (propagates to drafts, CSV/JSON, and publishing)
 - Added `--no-html-report` to disable HTML report generation
+- Added `simulate --clean` to delete the output directory before writing
 - Improved HTML report UX (search/filter, accessible structure, responsive layout, dark-mode support for paper theme)
 - CLI version now reads from `package.json`
 - Hardened backlog item IDs to be filename-safe

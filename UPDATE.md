@@ -3,6 +3,7 @@
 ## What shipped
 - Per-item backlog `labels` now flow into drafts, reports, and `publish`
 - `simulate` supports `--no-html-report`
+- `simulate` supports `--clean` (removes output dir before writing)
 - HTML report is more usable (search/filter, responsive layout, dark-mode support for paper theme)
 - `publish` can resume via `out/report/publish-state.json` (skips already-created issues)
 
@@ -10,6 +11,7 @@
 - `make check`
 - `node dist/index.js simulate -i examples/backlog.yml -o out`
 - `node dist/index.js simulate -i examples/backlog.yml -o out --no-html-report`
+- `node dist/index.js simulate -i examples/backlog.yml -o out --clean --no-html-report`
 - `node dist/index.js publish --repo owner/repo --issues-dir out/issues --report-csv out/report/summary.csv --dry-run`
 
 ## Notes
