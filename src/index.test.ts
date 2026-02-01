@@ -75,6 +75,30 @@ describe("simulate", () => {
     expect(plan).toContain(`Generated: ${stamp}`);
   });
 
+  it("can sort issues by id", () => {
+    const outDir = join(".tmp", "out-sort-id");
+    execSync(`rm -rf ${outDir}`);
+    mkdirSync(outDir, { recursive: true });
+    const backlogPath = join(outDir, "backlog.yml");
+    writeFileSync(
+      backlogPath,
+      [
+        "project: Sort",
+        "items:",
+        "  - id: b-002",
+        "    title: B",
+        "    pitch: B",
+        "  - id: a-001",
+        "    title: A",
+        "    pitch: A"
+      ].join("\n")
+    );
+
+    execSync(`${bin} simulate -i ${backlogPath} -o ${outDir} --sort id --no-html-report`, { stdio: "ignore" });
+    const issue1 = readFileSync(join(outDir, "issues", "01-a-001-a.md"), "utf8");
+    expect(issue1).toContain("ID: a-001");
+  });
+
   it("can clean an existing output directory", () => {
     const outDir = join(".tmp", "out-clean");
     execSync(`rm -rf ${outDir}`);

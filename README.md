@@ -52,6 +52,11 @@ Reproducible plan timestamp:
 node dist/index.js simulate -i examples/backlog.yml -o out --generated-at 2000-01-01T00:00:00.000Z
 ```
 
+Stable ordering:
+```bash
+node dist/index.js simulate -i examples/backlog.yml -o out --sort id
+```
+
 Publish to GitHub (requires `gh auth login`):
 ```bash
 node dist/index.js publish \

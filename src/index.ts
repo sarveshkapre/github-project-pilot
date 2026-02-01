@@ -67,6 +67,7 @@ type ProjectDraftState = {
 };
 
 type OutputFormat = "pretty" | "json";
+type SortMode = "input" | "id";
 
 const program = new Command();
 
@@ -83,6 +84,7 @@ program
   .option("--clean", "delete the output directory before writing", false)
   .option("--format <name>", "stdout summary format (pretty|json)", "pretty")
   .option("--generated-at <value>", "override plan generated_at (ISO 8601)")
+  .option("--sort <mode>", "ordering for plan/issues (input|id)", "input")
   .option("--issue-template <file>", "issue template file path")
   .option("--plan-template <file>", "plan template file path")
   .option("--report <dir>", "summary report directory (relative to output)", "report")
@@ -92,17 +94,19 @@ program
   .option("--dry-run", "print summary only", false)
   .action((options) => {
     const format = normalizeOutputFormat(options.format);
+    const sortMode = normalizeSortMode(options.sort);
     const backlog = loadBacklog(options.input);
+    const ordered = sortBacklog(backlog, sortMode);
     const templates = loadTemplates(options.issueTemplate, options.planTemplate);
     if (!options.allowMissingPlaceholders) {
       validateTemplates(templates);
     }
-    const issues = buildIssueDrafts(backlog, templates);
+    const issues = buildIssueDrafts(ordered, templates);
     const generatedAt = normalizeGeneratedAt(options.generatedAt);
-    const plan = buildPlan(backlog, templates, generatedAt);
+    const plan = buildPlan(ordered, templates, generatedAt);
 
     if (options.dryRun) {
-      printSummary(backlog, issues, format);
+      printSummary(ordered, issues, format);
       return;
     }
 
@@ -111,7 +115,7 @@ program
       cleanOutputDir(options.out);
     }
     writeOutputs(options.out, plan, issues, options.report, options.htmlReport, theme);
-    printSummary(backlog, issues, format, options.out);
+    printSummary(ordered, issues, format, options.out);
   });
 
 program
@@ -560,6 +564,14 @@ function normalizeOutputFormat(format: string): OutputFormat {
   return normalized;
 }
 
+function normalizeSortMode(mode: string): SortMode {
+  const normalized = mode.trim().toLowerCase();
+  if (normalized !== "input" && normalized !== "id") {
+    throw new Error(`Unknown sort mode "${mode}". Expected "input" or "id".`);
+  }
+  return normalized;
+}
+
 function normalizeGeneratedAt(value?: string): string {
   if (value === undefined) {
     return new Date().toISOString();
@@ -573,6 +585,14 @@ function normalizeGeneratedAt(value?: string): string {
     throw new Error(`generated-at must be an ISO 8601 timestamp, got: "${value}"`);
   }
   return trimmed;
+}
+
+function sortBacklog(backlog: Backlog, mode: SortMode): Backlog {
+  if (mode === "input") return backlog;
+  return {
+    ...backlog,
+    items: [...backlog.items].sort((a, b) => a.id.localeCompare(b.id))
+  };
 }
 
 function paperThemeCss(): string {

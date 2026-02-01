@@ -33,6 +33,7 @@ For more, see `docs/PROJECT.md`.
 - 2026-02-01: `project-drafts` resume state via `out/report/project-drafts-state.json`
 - 2026-02-01: `simulate --format json` for CI-friendly stdout summaries
 - 2026-02-01: `simulate --generated-at <iso>` for reproducible plan timestamps
+- 2026-02-01: `simulate --sort id` for stable issue/plan ordering
 
 ## Next
 - Per-item metadata overrides beyond labels (priority, milestones, assignees)
