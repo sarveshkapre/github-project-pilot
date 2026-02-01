@@ -38,6 +38,10 @@ node dist/index.js simulate \
   --html-theme paper
 ```
 
+Themes:
+- `paper` (light + dark-mode aware)
+- `mono` (dark, monospace)
+
 Publish to GitHub (requires `gh auth login`):
 ```bash
 node dist/index.js publish \

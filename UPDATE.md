@@ -5,6 +5,7 @@
 - `simulate` supports `--no-html-report`
 - `simulate` supports `--clean` (removes output dir before writing)
 - HTML report is more usable (search/filter, responsive layout, dark-mode support for paper theme)
+- `--html-theme mono` styling now matches the report layout
 - `publish` can resume via `out/report/publish-state.json` (skips already-created issues)
 - Backlog duplicate IDs are rejected early with a clear error
 

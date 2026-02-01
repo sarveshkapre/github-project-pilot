@@ -32,6 +32,16 @@ describe("simulate", () => {
 
     const html = readFileSync(join(outDir, "report", "index.html"), "utf8");
     expect(html).toContain("GitHub Project Pilot Report");
+    expect(html).toContain(".app-header");
+  });
+
+  it("styles the mono HTML theme", () => {
+    const outDir = join(".tmp", "out-mono-theme");
+    execSync(`rm -rf ${outDir}`);
+    execSync(`${bin} simulate -i examples/backlog.yml -o ${outDir} --html-theme mono`, { stdio: "ignore" });
+    const html = readFileSync(join(outDir, "report", "index.html"), "utf8");
+    expect(html).toContain(".app-header");
+    expect(html).toContain("color-scheme: dark");
   });
 
   it("can disable the HTML report", () => {

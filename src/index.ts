@@ -569,13 +569,48 @@ function paperThemeCss(): string {
 function monoThemeCss(): string {
   return `
     :root { color-scheme: dark; }
+    :root {
+      --bg: #0d0f12;
+      --card: #101318;
+      --text: #e6e6e6;
+      --muted: #aeb6c2;
+      --border: #2a313b;
+      --code-bg: #151a20;
+      --code-text: #d6f0ff;
+      --chip-bg: rgba(230, 230, 230, 0.10);
+      --chip-text: #e6e6e6;
+      --link: #7ab7ff;
+      --focus: #7ab7ff;
+    }
     * { box-sizing: border-box; }
-    body { font-family: "IBM Plex Mono", ui-monospace, "SF Mono", monospace; margin: 2rem; background: #0d0f12; color: #e6e6e6; }
-    h1, h2, h3 { margin-top: 1.5rem; text-transform: uppercase; letter-spacing: 0.04em; }
-    pre { background: #151a20; color: #d6f0ff; padding: 1rem; overflow-x: auto; border-radius: 6px; }
-    table { width: 100%; border-collapse: collapse; margin-top: 1rem; background: #101318; }
-    th, td { border: 1px solid #2a313b; padding: 0.5rem; text-align: left; }
-    .issue { border-top: 1px solid #2a313b; padding-top: 1rem; }
+    body { font-family: ui-monospace, "SF Mono", Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; margin: 2rem; background: var(--bg); color: var(--text); }
+    a { color: var(--link); text-decoration-thickness: 0.08em; text-underline-offset: 0.12em; }
+    a:focus-visible, input:focus-visible, summary:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; border-radius: 6px; }
+    .skip-link { position: absolute; left: -999px; top: 0; padding: 0.5rem 0.75rem; background: var(--card); border: 1px solid var(--border); }
+    .skip-link:focus { left: 1rem; top: 1rem; }
+    .app-header { display: flex; gap: 1.5rem; align-items: end; justify-content: space-between; flex-wrap: wrap; max-width: 980px; margin: 0 auto 1.5rem; }
+    .app-title h1 { margin: 0; font-size: 1.4rem; text-transform: uppercase; letter-spacing: 0.06em; }
+    .app-subtitle { margin: 0.25rem 0 0; color: var(--muted); }
+    .controls { display: flex; gap: 1rem; align-items: end; }
+    .control { display: grid; gap: 0.35rem; font-size: 0.85rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.04em; }
+    input[type="search"] { width: min(420px, 80vw); padding: 0.55rem 0.7rem; border-radius: 10px; border: 1px solid var(--border); background: var(--card); color: var(--text); }
+    main { max-width: 980px; margin: 0 auto; display: grid; gap: 1.25rem; }
+    .card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 1rem 1.1rem; }
+    h2 { margin: 0.25rem 0 0.75rem; font-size: 1rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); }
+    pre { background: var(--code-bg); color: var(--code-text); padding: 1rem; overflow-x: auto; border-radius: 12px; }
+    table { width: 100%; border-collapse: collapse; margin-top: 0.75rem; }
+    caption { text-align: left; color: var(--muted); padding-bottom: 0.5rem; }
+    th, td { border-top: 1px solid var(--border); padding: 0.6rem 0.5rem; text-align: left; vertical-align: top; }
+    th { font-size: 0.85rem; color: var(--muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; }
+    .issue { border-top: 1px solid var(--border); padding-top: 1rem; margin-top: 1rem; }
+    .issue:first-child { border-top: none; padding-top: 0; margin-top: 0; }
+    .issue-header { display: flex; gap: 1rem; align-items: baseline; justify-content: space-between; flex-wrap: wrap; }
+    .issue-title { margin: 0; font-size: 0.95rem; }
+    .issue-meta { display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap; }
+    .chips { display: flex; gap: 0.4rem; flex-wrap: wrap; }
+    .chip { display: inline-flex; align-items: center; padding: 0.15rem 0.45rem; border-radius: 999px; background: var(--chip-bg); color: var(--chip-text); font-size: 0.75rem; }
+    .issue-details { margin-top: 0.6rem; }
+    summary { cursor: pointer; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; }
   `;
 }
 
