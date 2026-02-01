@@ -1,0 +1,17 @@
+project: GitHub Project Pilot
+items:
+  - id: gp-001
+    title: Bootstrap repo
+    pitch: Create the base repository scaffolding and CI pipeline.
+    status: backlog
+    tasks:
+      - Add repo docs and hygiene files
+      - Configure CI checks
+  - id: gp-002
+    title: Plan generator MVP
+    pitch: Convert backlog rows into a local execution plan and issue drafts.
+    status: backlog
+    tasks:
+      - Parse backlog YAML
+      - Generate plan.md and issue drafts
+      - Add smoke tests
