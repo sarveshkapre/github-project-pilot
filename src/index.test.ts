@@ -243,6 +243,20 @@ describe("publish", () => {
     );
     expect(stdout).toContain("--assignee sarveshkapre");
   });
+
+  it("can set a milestone (dry-run)", () => {
+    const outDir = join(".tmp", "out-publish-milestone");
+    execSync(`rm -rf ${outDir}`);
+    execSync(`${bin} simulate -i examples/backlog.yml -o ${outDir} --no-html-report`, { stdio: "ignore" });
+
+    const reportCsv = join(outDir, "report", "summary.csv");
+    const issuesDir = join(outDir, "issues");
+    const stdout = execSync(
+      `${bin} publish --repo o/r --issues-dir ${issuesDir} --report-csv ${reportCsv} --milestone M1 --dry-run`,
+      { encoding: "utf8" }
+    );
+    expect(stdout).toContain("--milestone M1");
+  });
 });
 
 describe("project-drafts", () => {

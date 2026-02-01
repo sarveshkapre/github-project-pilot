@@ -71,7 +71,8 @@ node dist/index.js publish \
   --limit 10 \
   --delay-ms 300 \
   --state-file out/report/publish-state.json \
-  --assignee-from-owner
+  --assignee-from-owner \
+  --milestone "MVP"
 ```
 
 Create GitHub Project draft items (requires `gh auth login` + project scope):

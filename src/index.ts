@@ -157,6 +157,7 @@ program
   .option("--limit <n>", "publish at most N issues", parseInteger)
   .option("--delay-ms <n>", "delay between publishes in ms", parseInteger, 0)
   .option("--assignee-from-owner", "set issue assignee(s) from `Owner:` in issue drafts", false)
+  .option("--milestone <name>", "set GitHub milestone for created issues")
   .option("--state-file <file>", "publish state file path (default: alongside report CSV)")
   .option("--no-resume", "do not skip issues already recorded in the state file")
   .option("--dry-run", "print intended gh commands without publishing", false)
@@ -182,17 +183,18 @@ program
     if (options.dryRun) {
       toPublish.forEach((payload) => {
         const assigneeFlags = payload.assignees?.length ? ` --assignee ${payload.assignees.join(",")}` : "";
+        const milestoneFlag = options.milestone ? ` --milestone ${options.milestone}` : "";
         console.log(
           `[dry-run] gh issue create --repo ${options.repo} --title ${payload.title} --label ${payload.labels.join(
             ","
-          )}${assigneeFlags}`
+          )}${assigneeFlags}${milestoneFlag}`
         );
       });
       return;
     }
 
     for (const payload of toPublish) {
-      const created = createGitHubIssue(options.repo, payload);
+      const created = createGitHubIssue(options.repo, payload, options.milestone);
       state.created[payload.id] = {
         title: payload.title,
         labels: payload.labels,
@@ -826,7 +828,8 @@ function buildPublishPayloads(
 
 function createGitHubIssue(
   repo: string,
-  issue: PublishPayload
+  issue: PublishPayload,
+  milestone?: string
 ): { url?: string; number?: number } {
   const args = [
     "issue",
@@ -845,6 +848,10 @@ function createGitHubIssue(
 
   if (issue.assignees?.length) {
     args.push("--assignee", issue.assignees.join(","));
+  }
+
+  if (milestone) {
+    args.push("--milestone", milestone);
   }
 
   const stdout = execFileSync("gh", args, { stdio: ["ignore", "pipe", "inherit"], encoding: "utf8" });
