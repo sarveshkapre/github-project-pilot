@@ -32,13 +32,25 @@ node dist/index.js simulate \
   -i examples/backlog.yml \
   --issue-template examples/templates/issue.md \
   --plan-template examples/templates/plan.md \
-  --report report
+  --report report \
+  --html-theme paper
 ```
 
 Publish to GitHub (requires `gh auth login`):
 ```bash
 node dist/index.js publish \
   --repo sarveshkapre/github-project-pilot \
+  --issues-dir out/issues \
+  --report-csv out/report/summary.csv \
+  --limit 10 \
+  --delay-ms 300
+```
+
+Create GitHub Project draft items (requires `gh auth login` + project scope):
+```bash
+node dist/index.js project-drafts \
+  --owner sarveshkapre \
+  --project-number 1 \
   --issues-dir out/issues \
   --report-csv out/report/summary.csv
 ```

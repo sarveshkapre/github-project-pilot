@@ -6,8 +6,8 @@
 - Add HTML report styling
 
 ## Next
-- Optional GitHub API integration (opt-in, with auth)
 - Import summary CSV into GitHub Issues
+- Project field mapping (status/owner/priority)
 
 ## Later
 - Web dashboard

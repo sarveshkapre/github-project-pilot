@@ -12,5 +12,5 @@
 
 ## Next 3 Improvements
 1. Add template variables for section overrides (per-item metadata)
-2. Add validation for missing template placeholders
-3. Add configurable HTML themes
+2. Add per-item field mapping for GitHub Projects
+3. Add publish resume support (skip existing issues)
