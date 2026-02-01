@@ -66,6 +66,8 @@ type ProjectDraftState = {
   created: Record<string, { title: string }>;
 };
 
+type OutputFormat = "pretty" | "json";
+
 const program = new Command();
 
 program
@@ -79,6 +81,7 @@ program
   .requiredOption("-i, --input <file>", "backlog YAML file")
   .option("-o, --out <dir>", "output directory", "./out")
   .option("--clean", "delete the output directory before writing", false)
+  .option("--format <name>", "stdout summary format (pretty|json)", "pretty")
   .option("--issue-template <file>", "issue template file path")
   .option("--plan-template <file>", "plan template file path")
   .option("--report <dir>", "summary report directory (relative to output)", "report")
@@ -87,6 +90,7 @@ program
   .option("--allow-missing-placeholders", "allow templates to omit required placeholders", false)
   .option("--dry-run", "print summary only", false)
   .action((options) => {
+    const format = normalizeOutputFormat(options.format);
     const backlog = loadBacklog(options.input);
     const templates = loadTemplates(options.issueTemplate, options.planTemplate);
     if (!options.allowMissingPlaceholders) {
@@ -96,7 +100,7 @@ program
     const plan = buildPlan(backlog, templates);
 
     if (options.dryRun) {
-      printSummary(backlog, issues);
+      printSummary(backlog, issues, format);
       return;
     }
 
@@ -105,7 +109,7 @@ program
       cleanOutputDir(options.out);
     }
     writeOutputs(options.out, plan, issues, options.report, options.htmlReport, theme);
-    printSummary(backlog, issues, options.out);
+    printSummary(backlog, issues, format, options.out);
   });
 
 program
@@ -317,7 +321,18 @@ function writeOutputs(
   }
 }
 
-function printSummary(backlog: Backlog, issues: IssueDraft[], outDir?: string): void {
+function printSummary(backlog: Backlog, issues: IssueDraft[], format: OutputFormat, outDir?: string): void {
+  if (format === "json") {
+    const payload = {
+      project: backlog.project,
+      items: backlog.items.length,
+      issues_drafted: issues.length,
+      ...(outDir ? { out_dir: outDir } : {})
+    };
+    console.log(JSON.stringify(payload));
+    return;
+  }
+
   console.log(`Backlog project: ${backlog.project}`);
   console.log(`Items: ${backlog.items.length}`);
   console.log(`Issues drafted: ${issues.length}`);
@@ -531,6 +546,14 @@ function normalizeTheme(theme: string): string {
   if (normalized !== "paper" && normalized !== "mono") {
     console.warn(`Unknown theme "${theme}", falling back to "paper".`);
     return "paper";
+  }
+  return normalized;
+}
+
+function normalizeOutputFormat(format: string): OutputFormat {
+  const normalized = format.trim().toLowerCase();
+  if (normalized !== "pretty" && normalized !== "json") {
+    throw new Error(`Unknown format "${format}". Expected "pretty" or "json".`);
   }
   return normalized;
 }

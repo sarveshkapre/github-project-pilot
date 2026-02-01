@@ -42,6 +42,11 @@ Themes:
 - `paper` (light + dark-mode aware)
 - `mono` (dark, monospace)
 
+CI/pipeline-friendly output:
+```bash
+node dist/index.js simulate -i examples/backlog.yml --dry-run --format json
+```
+
 Publish to GitHub (requires `gh auth login`):
 ```bash
 node dist/index.js publish \

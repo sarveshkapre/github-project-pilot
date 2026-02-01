@@ -51,6 +51,19 @@ describe("simulate", () => {
     expect(existsSync(join(outDir, "report", "index.html"))).toBe(false);
   });
 
+  it("can output JSON summary to stdout", () => {
+    const result = spawnSync("node", ["dist/index.js", "simulate", "-i", "examples/backlog.yml", "--format", "json", "--dry-run"], {
+      encoding: "utf8"
+    });
+    expect(result.status).toBe(0);
+    const parsed = JSON.parse((result.stdout || "").trim());
+    expect(parsed).toMatchObject({
+      project: "GitHub Project Pilot",
+      items: 2,
+      issues_drafted: 2
+    });
+  });
+
   it("can clean an existing output directory", () => {
     const outDir = join(".tmp", "out-clean");
     execSync(`rm -rf ${outDir}`);

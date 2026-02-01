@@ -31,6 +31,7 @@ For more, see `docs/PROJECT.md`.
 - 2026-02-01: Per-item `acceptance` + `risks` fields (override defaults in plan + issue drafts)
 - 2026-02-01: `publish --assignee-from-owner` to assign issues from `Owner:` in issue drafts
 - 2026-02-01: `project-drafts` resume state via `out/report/project-drafts-state.json`
+- 2026-02-01: `simulate --format json` for CI-friendly stdout summaries
 
 ## Next
 - Per-item metadata overrides beyond labels (priority, milestones, assignees)

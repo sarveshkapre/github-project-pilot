@@ -5,6 +5,7 @@
 - Added per-item `acceptance` and `risks` overrides in backlog YAML
 - Added `--no-html-report` to disable HTML report generation
 - Added `simulate --clean` to delete the output directory before writing
+- Added `simulate --format json` to emit machine-readable summary to stdout
 - Improved HTML report UX (search/filter, accessible structure, responsive layout, dark-mode support for paper theme)
 - Fixed `--html-theme mono` styling to match the report layout
 - CLI version now reads from `package.json`
