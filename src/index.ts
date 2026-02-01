@@ -160,6 +160,7 @@ program
   .option("--milestone <name>", "set GitHub milestone for created issues")
   .option("--state-file <file>", "publish state file path (default: alongside report CSV)")
   .option("--no-resume", "do not skip issues already recorded in the state file")
+  .option("--continue-on-error", "log errors and continue instead of aborting", false)
   .option("--dry-run", "print intended gh commands without publishing", false)
   .action(async (options) => {
     const rows = loadSummaryCsv(options.reportCsv);
@@ -181,11 +182,11 @@ program
     }
 
     if (options.dryRun) {
-      toPublish.forEach((payload) => {
+      toPublish.forEach((payload, index) => {
         const assigneeFlags = payload.assignees?.length ? ` --assignee ${payload.assignees.join(",")}` : "";
         const milestoneFlag = options.milestone ? ` --milestone ${options.milestone}` : "";
         console.log(
-          `[dry-run] gh issue create --repo ${options.repo} --title ${payload.title} --label ${payload.labels.join(
+          `[dry-run] (${index + 1}/${toPublish.length}) gh issue create --repo ${options.repo} --title ${payload.title} --label ${payload.labels.join(
             ","
           )}${assigneeFlags}${milestoneFlag}`
         );
@@ -193,17 +194,27 @@ program
       return;
     }
 
-    for (const payload of toPublish) {
-      const created = createGitHubIssue(options.repo, payload, options.milestone);
-      state.created[payload.id] = {
-        title: payload.title,
-        labels: payload.labels,
-        ...(created.url ? { url: created.url } : {}),
-        ...(created.number ? { number: created.number } : {})
-      };
-      savePublishState(stateFile, state);
-      if (options.delayMs > 0) {
-        await sleep(options.delayMs);
+    console.log(`Publishing ${toPublish.length} issues${resume ? " (resuming)" : ""}...`);
+    for (const [index, payload] of toPublish.entries()) {
+      console.log(`Publishing ${index + 1}/${toPublish.length}: ${payload.title}`);
+      try {
+        const created = createGitHubIssue(options.repo, payload, options.milestone);
+        state.created[payload.id] = {
+          title: payload.title,
+          labels: payload.labels,
+          ...(created.url ? { url: created.url } : {}),
+          ...(created.number ? { number: created.number } : {})
+        };
+        savePublishState(stateFile, state);
+        if (options.delayMs > 0) {
+          await sleep(options.delayMs);
+        }
+      } catch (error) {
+        console.error(`Failed to publish ${payload.title}: ${error instanceof Error ? error.message : String(error)}`);
+        if (!options.continueOnError) {
+          throw error;
+        }
+        console.log("Continuing despite error...");
       }
     }
   });
@@ -627,6 +638,18 @@ function sortBacklog(backlog: Backlog, mode: SortMode): Backlog {
   };
 }
 
+function simulatePublishFailure(payload: PublishPayload): void {
+  const envValue = process.env["GH_PROJECT_PILOT_FORCE_PUBLISH_FAIL"];
+  if (!envValue) return;
+  const targets = envValue
+    .split(",")
+    .map((value) => value.trim())
+    .filter(Boolean);
+  if (targets.includes(payload.id)) {
+    throw new Error(`Simulated publish failure for ${payload.id}`);
+  }
+}
+
 function paperThemeCss(): string {
   return `
     :root { color-scheme: light dark; }
@@ -831,6 +854,7 @@ function createGitHubIssue(
   issue: PublishPayload,
   milestone?: string
 ): { url?: string; number?: number } {
+  simulatePublishFailure(issue);
   const args = [
     "issue",
     "create",

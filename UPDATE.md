@@ -15,6 +15,7 @@
 - `publish --assignee-from-owner` can assign issues from backlog `owner`
 - `publish --milestone <name>` can set milestone when creating issues
 - `project-drafts` can resume via `out/report/project-drafts-state.json` (skips already-created drafts)
+- `publish` now logs progress and `--continue-on-error` keeps going when individual creates fail
 - Backlog duplicate IDs are rejected early with a clear error
 
 ## How to verify

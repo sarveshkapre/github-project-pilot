@@ -36,6 +36,7 @@ For more, see `docs/PROJECT.md`.
 - 2026-02-01: `simulate --sort id` for stable issue/plan ordering
 - 2026-02-01: `validate` command for schema/template checks
 - 2026-02-01: `publish --milestone <name>` to set milestone on issue creation
+- 2026-02-01: publish progress logs + `--continue-on-error`
 
 ## Next
 - Per-item metadata overrides beyond labels (priority, milestones, assignees)

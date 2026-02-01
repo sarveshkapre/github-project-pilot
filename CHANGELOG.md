@@ -19,6 +19,7 @@
 - Added `publish --assignee-from-owner` to assign issues from `Owner:` in issue drafts
 - Added `publish --milestone <name>` to set a milestone when creating issues
 - Added `project-drafts` resume support via `project-drafts-state.json` (skips already-created drafts)
+- Added publish progress logging + `--continue-on-error` so failures don’t abort the batch
 
 ## [0.1.0] - 2026-02-01
 - Initial scaffold with local-first CLI

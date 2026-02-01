@@ -73,6 +73,9 @@ node dist/index.js publish \
   --state-file out/report/publish-state.json \
   --assignee-from-owner \
   --milestone "MVP"
+
+Options:
+- `--continue-on-error`: log failures and keep publishing remaining issues.
 ```
 
 Create GitHub Project draft items (requires `gh auth login` + project scope):

@@ -259,6 +259,38 @@ describe("publish", () => {
   });
 });
 
+describe("publish continue-on-error", () => {
+  it("continues when a publish fails", () => {
+    const outDir = join(".tmp", "out-publish-error");
+    execSync(`rm -rf ${outDir}`);
+    execSync(`${bin} simulate -i examples/backlog.yml -o ${outDir} --no-html-report`, { stdio: "ignore" });
+
+    const reportCsv = join(outDir, "report", "summary.csv");
+    const issuesDir = join(outDir, "issues");
+    const env = { ...process.env, GH_PROJECT_PILOT_FORCE_PUBLISH_FAIL: "gp-001,gp-002" };
+    const result = spawnSync(
+      "node",
+      [
+        "dist/index.js",
+        "publish",
+        "--repo",
+        "o/r",
+        "--issues-dir",
+        issuesDir,
+        "--report-csv",
+        reportCsv,
+        "--continue-on-error"
+      ],
+      { encoding: "utf8", env }
+    );
+
+    expect(result.status).toBe(0);
+    expect(result.stderr).toContain("Failed to publish Bootstrap repo");
+    expect(result.stderr).toContain("Failed to publish Plan generator MVP");
+    expect(result.stdout).toContain("Continuing despite error");
+  });
+});
+
 describe("project-drafts", () => {
   it("skips drafts already recorded in state (dry-run)", () => {
     const outDir = join(".tmp", "out-project-drafts");
