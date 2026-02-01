@@ -17,10 +17,21 @@ node dist/index.js simulate -i examples/backlog.yml -o out
 Outputs:
 - `out/plan.md`
 - `out/issues/*.md`
+- `out/report/summary.json`
+- `out/report/summary.csv`
 
 ## CLI
 ```bash
 node dist/index.js simulate -i <backlog.yml> -o <output-dir>
+```
+
+Template options:
+```bash
+node dist/index.js simulate \
+  -i examples/backlog.yml \
+  --issue-template examples/templates/issue.md \
+  --plan-template examples/templates/plan.md \
+  --report report
 ```
 
 ## Backlog format

@@ -27,14 +27,16 @@ Data flow:
 ## MVP Checklist
 - [x] Backlog YAML schema + validation
 - [x] `simulate` command generates plan + issue drafts
-- [x] Deterministic output paths
+- [x] Template overrides for plan + issues
+- [x] Summary report output (CSV/JSON)
+- [x] Deterministic output paths with item IDs
 - [x] Smoke test for CLI
 - [x] Repo scaffolding and CI
 
 ## Milestones
 1. Scaffold repo + CLI skeleton
 2. MVP generation workflow
-3. UX polish: templates and labeling
+3. UX polish: templates, labeling, and reports
 4. Hardening: error messages + safer defaults
 
 ## Risks

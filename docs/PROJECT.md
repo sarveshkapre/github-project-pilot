@@ -11,6 +11,6 @@
 - Release prep: `make release`
 
 ## Next 3 Improvements
-1. Add template customization (labels, acceptance criteria)
-2. Add summary report (CSV/JSON) for issue drafts
-3. Add deterministic ID mapping for traceability
+1. Add template variables for section overrides (per-item metadata)
+2. Add validation for missing template placeholders
+3. Add CSV/JSON import back into GitHub Issues
