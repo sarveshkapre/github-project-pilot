@@ -26,6 +26,11 @@ Outputs:
 node dist/index.js simulate -i <backlog.yml> -o <output-dir>
 ```
 
+Validate only:
+```bash
+node dist/index.js validate -i <backlog.yml>
+```
+
 Template options:
 ```bash
 node dist/index.js simulate \

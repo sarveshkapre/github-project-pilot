@@ -8,6 +8,7 @@
 - Added `simulate --format json` to emit machine-readable summary to stdout
 - Added `simulate --generated-at <iso>` to override plan timestamp (reproducible output)
 - Added `simulate --sort id` to generate stable plan/issue ordering
+- Added `validate` command (schema + template placeholder validation)
 - Improved HTML report UX (search/filter, accessible structure, responsive layout, dark-mode support for paper theme)
 - Fixed `--html-theme mono` styling to match the report layout
 - CLI version now reads from `package.json`

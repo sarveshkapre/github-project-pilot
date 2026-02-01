@@ -119,6 +119,36 @@ program
   });
 
 program
+  .command("validate")
+  .description("Validate backlog YAML and (optionally) templates, without writing outputs.")
+  .requiredOption("-i, --input <file>", "backlog YAML file")
+  .option("--issue-template <file>", "issue template file path")
+  .option("--plan-template <file>", "plan template file path")
+  .option("--allow-missing-placeholders", "allow templates to omit required placeholders", false)
+  .option("--format <name>", "stdout format (pretty|json)", "pretty")
+  .action((options) => {
+    const format = normalizeOutputFormat(options.format);
+    const backlog = loadBacklog(options.input);
+    const templates = loadTemplates(options.issueTemplate, options.planTemplate);
+    if (!options.allowMissingPlaceholders) {
+      validateTemplates(templates);
+    }
+
+    if (format === "json") {
+      console.log(
+        JSON.stringify({
+          ok: true,
+          project: backlog.project,
+          items: backlog.items.length
+        })
+      );
+      return;
+    }
+
+    console.log(`Valid backlog: ${backlog.project} (${backlog.items.length} items)`);
+  });
+
+program
   .command("publish")
   .description("Create GitHub Issues from a summary CSV and issue drafts via gh CLI.")
   .requiredOption("--repo <owner/repo>", "target GitHub repository")

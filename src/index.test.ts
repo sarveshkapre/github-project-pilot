@@ -281,3 +281,14 @@ describe("project-drafts", () => {
     expect(dryRunLines.join("\n")).toContain("Plan generator MVP");
   });
 });
+
+describe("validate", () => {
+  it("validates backlog and can output JSON", () => {
+    const result = spawnSync("node", ["dist/index.js", "validate", "-i", "examples/backlog.yml", "--format", "json"], {
+      encoding: "utf8"
+    });
+    expect(result.status).toBe(0);
+    const parsed = JSON.parse((result.stdout || "").trim());
+    expect(parsed).toMatchObject({ ok: true, project: "GitHub Project Pilot", items: 2 });
+  });
+});

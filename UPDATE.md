@@ -8,6 +8,7 @@
 - `simulate --format json` emits machine-readable summary to stdout (useful in CI)
 - `simulate --generated-at <iso>` overrides the plan timestamp (reproducible output)
 - `simulate --sort id` produces stable ordering for plans/issues
+- Added `validate` command for CI/pre-commit checks
 - HTML report is more usable (search/filter, responsive layout, dark-mode support for paper theme)
 - `--html-theme mono` styling now matches the report layout
 - `publish` can resume via `out/report/publish-state.json` (skips already-created issues)
