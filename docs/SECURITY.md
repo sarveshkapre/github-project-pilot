@@ -7,4 +7,4 @@ Report security issues privately to the maintainer. Do not open public issues fo
 - Input YAML could be malicious or malformed → strict schema validation.
 - Generated files should not overwrite user data → always write to output dir.
 - Future GitHub integration must use least-privilege tokens.
-- GitHub publish command requires explicit token and never stores it.
+- GitHub publish command uses `gh` CLI auth and never stores tokens.

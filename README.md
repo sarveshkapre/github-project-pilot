@@ -35,9 +35,8 @@ node dist/index.js simulate \
   --report report
 ```
 
-Publish to GitHub (requires token):
+Publish to GitHub (requires `gh auth login`):
 ```bash
-export GITHUB_TOKEN=your_token
 node dist/index.js publish \
   --repo sarveshkapre/github-project-pilot \
   --issues-dir out/issues \
